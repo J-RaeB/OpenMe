@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>💖 Cute Ghost Confession</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: "Comic Sans MS", cursive;
+    background-color: #ffd6e8;
+    color: #ff4081;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  section {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.8s;
+  }
+  section.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  h1 {
+    font-size: 1.8em;
+    max-width: 80%;
+    line-height: 1.5;
+  }
+  button {
+    background: white;
+    border: 2px solid #ff4081;
+    border-radius: 20px;
+    color: #ff4081;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    margin: 8px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+  }
+  button:hover {
+    transform: scale(1.1);
+    background-color: #ffe6f3;
+  }
+
+  /* Floating ghost */
+  .ghost {
+    position: relative;
+    width: 110px;
+    height: 130px;
+    background: #fff;
+    border-radius: 60% 60% 25% 25%;
+    animation: float 4s ease-in-out infinite;
+  }
+  .ghost::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 35px;
+    background: #fff;
+    border-radius: 50% 50% 0 0;
+  }
+  .eye {
+    position: absolute;
+    top: 40px;
+    width: 16px;
+    height: 22px;
+    background: #444;
+    border-radius: 50%;
+  }
+  .eye.left { left: 30px; }
+  .eye.right { right: 30px; }
+  .heart-pin {
+    position: absolute;
+    top: -20px;
+    left: 70px;
+    width: 20px;
+    height: 20px;
+    background: #ff5c8d;
+    transform: rotate(45deg);
+    border-radius: 50% 0 50% 0;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translate(-10px, 0); }
+    50% { transform: translate(10px, -15px); }
+  }
+
+  /* Sparkling hearts */
+  .heart {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: #ff9fbb;
+    transform: rotate(45deg);
+    animation: floatHeart 6s linear infinite;
+    opacity: 0.8;
+  }
+  .heart::before, .heart::after {
+    content: "";
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: #ff9fbb;
+    border-radius: 50%;
+  }
+  .heart::before { top: -7.5px; left: 0; }
+  .heart::after { left: 7.5px; top: 0; }
+
+  @keyframes floatHeart {
+    0% { transform: translateY(0) rotate(45deg); opacity: 1; }
+    100% { transform: translateY(-120vh) rotate(45deg); opacity: 0; }
+  }
+
+  .message {
+    max-width: 80%;
+    text-align: justify;
+    line-height: 1.6;
+    font-size: 1.2em;
+    margin-top: 20px;
+  }
+  .flowers {
+    font-size: 1.4em;
+    line-height: 1.5;
+    white-space: pre-line;
+  }
+</style>
+</head>
+<body>
+
+<!-- Background music (hidden, autoplay, loop) -->
+<audio id="bgMusic" autoplay loop hidden>
+  <source src="https://cdn.pixabay.com/audio/2023/03/25/audio_2c34a3c703.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Question 1 -->
+<section id="q1" class="active">
+  <h1>Do you love me? 💕</h1>
+  <button onclick="next('q1','q2')">Yes 💖</button>
+  <button onclick="wrong()">No 😤</button>
+</section>
+
+<!-- Question 2 -->
+<section id="q2">
+  <h1>Would you like to spend some time with me? 🥰</h1>
+  <button onclick="next('q2','riddle')">Yes 💞</button>
+  <button onclick="wrong()">No 😤</button>
+</section>
+
+<!-- Riddle -->
+<section id="riddle">
+  <h1>💘 What’s something sweet, and makes my heart skip a beat?</h1>
+  <div class="choices">
+    <button onclick="wrongRiddle()">Chocolate 🍫</button>
+    <button onclick="wrongRiddle()">Coffee ☕</button>
+    <button onclick="wrongRiddle()">Ice cream 🍦</button>
+    <button onclick="next('riddle','message')">You 💗</button>
+  </div>
+</section>
+
+<!-- Wrong Riddle Screen -->
+<section id="wrongRiddle">
+  <h1>No silly, it's YOU 💕</h1>
+  <button onclick="next('wrongRiddle','message')">Okay 😳</button>
+</section>
+
+<!-- Message Screen -->
+<section id="message">
+  <div class="ghost">
+    <div class="heart-pin"></div>
+    <div class="eye left"></div>
+    <div class="eye right"></div>
+  </div>
+  <div class="message">
+    I just wanted to let you know that you're the most cute guy I knew after a long time,
+    I hope we can spend some time together 💗
+  </div>
+  <button onclick="next('message','flowers')">Next 🌸</button>
+</section>
+
+<!-- Final Flowers Screen -->
+<section id="flowers">
+  <div class="ghost">
+    <div class="heart-pin"></div>
+    <div class="eye left"></div>
+    <div class="eye right"></div>
+  </div>
+  <div class="flowers">
+    🌸 Flowers for the cute guy 🌸<br>
+    Make sure to take care of yourself always,<br>
+    xoxo — Rae 💐
+  </div>
+</section>
+
+<script>
+/* Simple navigation */
+function next(current, next) {
+  document.getElementById(current).classList.remove("active");
+  document.getElementById(next).classList.add("active");
+}
+
+function wrong() {
+  alert("Oh oh~ That’s not the correct answer 😤 Please try again 💞");
+}
+
+function wrongRiddle() {
+  next('riddle','wrongRiddle');
+}
+
+/* Sparkly hearts generator */
+function makeHearts() {
+  const colors = ['#ff9fbb', '#ffcce7', '#ffb6c1'];
+  for (let i = 0; i < 15; i++) {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.animationDuration = 5 + Math.random() * 5 + 's';
+    heart.style.background = colors[Math.floor(Math.random()*colors.length)];
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 10000);
+  }
+}
+setInterval(makeHearts, 2000);
+</script>
+</body>
+</html>
